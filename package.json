@@ -9,9 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@airgap/beacon-types": "^4.0.4",
     "@chakra-ui/react": "^2.6.1",
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
+    "@taquito/beacon-wallet": "^16.1.2",
+    "@taquito/taquito": "^16.1.2",
     "@types/node": "20.2.3",
     "@types/react": "18.2.6",
     "@types/react-dom": "18.2.4",
@@ -20,6 +23,7 @@
     "framer-motion": "^10.12.16",
     "next": "13.4.3",
     "react": "18.2.0",
+    "react-cookie": "^4.1.1",
     "react-dom": "18.2.0",
     "typescript": "5.0.4"
   },

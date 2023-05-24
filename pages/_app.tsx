@@ -12,12 +12,15 @@ import {
   IconButton,
   useBreakpointValue
 } from '@chakra-ui/react'
+import { ConnectionProvider } from '@/packages/providers'
 
 export const App = ({ Component }: AppProps) => {
   return (
     <ChakraProvider>
-      <NavBar/>
-      <Component/>
+      <ConnectionProvider>
+        <NavBar/>
+        <Component/>
+      </ConnectionProvider>
     </ChakraProvider>
   )
 }
