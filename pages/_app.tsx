@@ -7,23 +7,31 @@ import {
   Container,
   ChakraProvider,
   Flex,
+  Text,
   HStack,
   IconButton,
   useBreakpointValue
 } from '@chakra-ui/react'
-import { Logo } from './Logo'
 
-export const App = () => {
-  const isDesktop = useBreakpointValue({ base: false, lg: true })
+export const App = ({ Component }: AppProps) => {
   return (
-    <Box as="section" pb={{ base: '12', md: '24' }}>
+    <ChakraProvider>
+      <NavBar/>
+      <Component/>
+    </ChakraProvider>
+  )
+}
+
+const NavBar = () => {
+  const isDesktop = useBreakpointValue({ base: false, lg: true })
+  return <Box as="section" pb={{ base: '12', md: '24' }}>
       <Box as="nav" bg="bg-surface" boxShadow="sm">
-        <Container py={{ base: '4', lg: '5' }}>
+        <Box px='48px' py={{ base: '4', lg: '5' }}>
           <HStack spacing="10" justify="space-between">
-            <Logo />
+            <Text>AstroNinja</Text>
             {isDesktop ? (
-              <Flex justify="space-between" flex="1">
-                <HStack spacing="3">
+              <Flex justify="right" flex="1">
+                <HStack spacing="10">
                   <Button variant="primary">Connect</Button>
                 </HStack>
               </Flex>
@@ -34,10 +42,9 @@ export const App = () => {
               />
             )}
           </HStack>
-        </Container>
+        </Box>
       </Box>
     </Box>
-  )
 }
 
 export default App

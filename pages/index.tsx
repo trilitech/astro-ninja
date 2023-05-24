@@ -17,9 +17,7 @@ export default function Home() {
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
         <div className={styles.description}>
-          <p>
-            Astronaut Ninja NFT Collection
-          </p>
+          <p>Astronaut Ninja NFT Collection</p>
           <Button colorScheme='blue'>Connect</Button>
         </div>
 
