@@ -1,7 +1,6 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import { Inter } from 'next/font/google'
-import { Button, ButtonGroup } from '@chakra-ui/react'
+import { Button, Image, ButtonGroup } from '@chakra-ui/react'
 import styles from '@/styles/Home.module.css'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -25,8 +24,7 @@ export default function Home() {
           <Image
             src="/astroninja.png"
             width={360}
-            height={360}
-            priority
+            height={360}            
           />
         </div>
 
