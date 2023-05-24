@@ -45,6 +45,7 @@ export const ConnectionProvider = ({ children }: { children: any }) => {
     }
   
   const disconnect = async function () {
+    console.log("disconnecting");
     setWallet(undefined)
     setWalletCookie(undefined)
   }

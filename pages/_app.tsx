@@ -12,7 +12,8 @@ import {
   IconButton,
   useBreakpointValue
 } from '@chakra-ui/react'
-import { ConnectionProvider } from '@/packages/providers'
+import { ConnectionProvider, useConnection } from '@/packages/providers'
+import Avatar from '@/components/Avatar'
 
 export const App = ({ Component }: AppProps) => {
   return (
@@ -27,23 +28,20 @@ export const App = ({ Component }: AppProps) => {
 
 const NavBar = () => {
   const isDesktop = useBreakpointValue({ base: false, lg: true })
+  const {address, connect} = useConnection()
+  
+  
   return <Box as="section" pb={{ base: '12', md: '24' }}>
       <Box as="nav" bg="bg-surface" boxShadow="sm">
         <Box px='48px' py={{ base: '4', lg: '5' }}>
           <HStack spacing="10" justify="space-between">
-            <Text>AstroNinja</Text>
-            {isDesktop ? (
-              <Flex justify="right" flex="1">
+            <Text>AstroNinja</Text>      
+              { address ? <Avatar address={address} /> : <Flex justify="right" flex="1">
                 <HStack spacing="10">
-                  <Button variant="primary">Connect</Button>
+                  <Button variant="primary" onClick= { connect }>Connect</Button>
                 </HStack>
               </Flex>
-            ) : (
-              <IconButton
-                variant="ghost"
-                aria-label="Open Menu"
-              />
-            )}
+              }            
           </HStack>
         </Box>
       </Box>
