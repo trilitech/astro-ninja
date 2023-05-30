@@ -7,15 +7,14 @@ export interface WalletInfo {
   address: string
   connection: WalletConnection
 }
-export interface TezpayDetails {
-  receiverAddress: string
+export interface ContractCallDetails {
+  contractAddress: string
   amountMutez: number
   id: string
-  expiresAt: string
 }
 
 export interface WalletApi {
-  transfer: (details: TezpayDetails) => Promise<string | undefined>
+  callcontract: (details: ContractCallDetails) => Promise<string | undefined>
   address: string
   connection: WalletConnection
   disconnect: () => Promise<void>

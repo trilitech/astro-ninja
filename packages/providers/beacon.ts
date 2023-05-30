@@ -6,7 +6,7 @@ import {
 } from '@airgap/beacon-types'
 
 import { MichelCodecPacker, TezosToolkit } from '@taquito/taquito'
-import { ConnectFn, TezpayDetails } from './types'
+import { ConnectFn, ContractCallDetails } from './types'
 
 const createBeaconWallet = () =>
   typeof window === 'undefined'
@@ -38,7 +38,7 @@ export const connectBeacon: ConnectFn = async (isNew) => {
         connectionType: 'beacon',
         name: undefined
       },
-      transfer: makeTransferBeaconFn(existingWallet),
+      callcontract: callContractBeaconFn(existingWallet) ,
       disconnect: async () => {
         await existingWallet.client.disconnect()
       }
@@ -64,7 +64,7 @@ export const connectBeacon: ConnectFn = async (isNew) => {
       imageUrl: undefined,
       connectionType
     },
-    transfer: makeTransferBeaconFn(beaconWallet),
+    callcontract: callContractBeaconFn(beaconWallet) ,
     disconnect: async () => {
       await beaconWallet.client.disconnect()
     }
@@ -114,18 +114,18 @@ export const tezosToolkit = new TezosToolkit(
 )
 tezosToolkit.setPackerProvider(new MichelCodecPacker())
 
-export const makeTransferBeaconFn =
+export const callContractBeaconFn =
   (beaconWallet: BeaconWallet) =>
-  async ({ amountMutez, receiverAddress, id, expiresAt }: TezpayDetails) => {
+  async ({ amountMutez, contractAddress, id }: ContractCallDetails) => {
     await beaconWallet?.requestPermissions({
       network: {
         type: process.env.NEXT_PUBLIC_NETWORK as any
       },
       scopes: [PermissionScope.OPERATION_REQUEST]
     })
-    const paypointContract = await tezosToolkit.contract.at(receiverAddress)
+    const contract = await tezosToolkit.contract.at(contractAddress)
 
-    const transfer = paypointContract.methods.default().toTransferParams()
+    const transfer = contract.methods.default().toTransferParams()
     transfer.parameter = {
       entrypoint: 'default',
       value: {
@@ -133,9 +133,6 @@ export const makeTransferBeaconFn =
         args: [
           {
             string: id
-          },
-          {
-            string: expiresAt
           }
         ]
       }

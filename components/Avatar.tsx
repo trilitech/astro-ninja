@@ -10,6 +10,7 @@ import {
     MenuDivider,
   } from '@chakra-ui/react'
   import { ConnectionProvider, useConnection } from '@/packages/providers'
+import { useRouter } from 'next/router'
 
 const sizes = {
   '50px': {
@@ -63,6 +64,11 @@ export const Avatar = ({ address }: {
 }) => {
   const color1 = stringToColour(address ?? '')
   const { disconnect } = useConnection()
+  const router = useRouter()
+  
+  const viewcollection = () => {
+    router.push("/collections?address=" + address);    
+  };
   
   return (
     <Menu>
@@ -79,7 +85,7 @@ export const Avatar = ({ address }: {
       </HStack>    
       </MenuButton>
       <MenuList>    
-    <MenuItem onClick={() => alert('TODO')}>View Collection</MenuItem>
+    <MenuItem onClick={viewcollection}>View Collection</MenuItem>
     <MenuItem onClick={disconnect}>Disconnect</MenuItem>
   </MenuList>
     </Menu>
