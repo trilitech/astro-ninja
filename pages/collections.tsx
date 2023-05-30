@@ -17,14 +17,12 @@ type Token = {
 }
 export default function Home() {
   const router = useRouter()
-  const address = router.query.address as string
+  const account = router.query.address as string
   const [data, setData] = useState<Token[]>()
   const [isLoading, setIsLoading] = useState(false)
-  const account = 'tz2EYMk3sHhPZvG81xy3km1d2n3vtehLfACb'
-  const limit = 10
-  console.log(address);
+  const limit = 48
   useEffect(() => {
-    if (!address) {
+    if (!account) {
       return 
     } 
     setIsLoading(true)
@@ -44,11 +42,12 @@ export default function Home() {
         }
       }).filter(e => !!e) as Token[])      
     }).finally(() => {setIsLoading(false)})
-  }, [address])
+  }, [account])
 
   return (
     <>     
       <main>        
+        <Box>Your Collected NFTs</Box>
         <SimpleGrid columns={[2, 2, 4]} width='100%' >
         {data?.map(t => <GridItem ><Image src={t.imageUrl} padding="2px" w='100%' h='100%'/></GridItem>)}    
         </SimpleGrid>   
