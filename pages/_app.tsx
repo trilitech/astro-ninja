@@ -41,15 +41,15 @@ const NavBar = () => {
   const {address, connect} = useConnection()
   const router = useRouter()
   
-  const viewcollection = () => {
-    router.push("/collection");    
+  const gotohome = () => {
+    router.push("/");    
   };
   
   return <Box as="section" pb={{ base: '12', md: '24' }}>
       <Box as="nav" bg="bg-surface" boxShadow="sm">
         <Box px='48px' py={{ base: '4', lg: '5' }}>
           <HStack spacing="10" justify="space-between">
-            <Text>AstroNinja</Text>      
+            <Text  onClick={ gotohome }>AstroNinja</Text>      
               { address ? <>
               <Avatar address={address} /> </> : 
                 <Flex justify="right" flex="1">
