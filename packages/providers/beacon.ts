@@ -50,7 +50,13 @@ export const connectBeacon: ConnectFn = async (isNew) => {
   if (!beaconWallet) {
     throw new Error('Tried to connect on the server')
   }
-  const response = await beaconWallet.client.requestPermissions({})
+
+  const response = await beaconWallet.client.requestPermissions({
+    network: {
+      type: process.env.NEXT_PUBLIC_NETWORK as any
+    },
+    scopes: [PermissionScope.OPERATION_REQUEST]
+  })
 
   const connectionType = await getBeaconAppName(response, beaconWallet).catch(
     () => {
