@@ -17,6 +17,8 @@ build
 # ligo
 _esy
 .ligo
+contract/_esy
+contract/.ligo
 
 # local env files
 .env.local
@@ -25,4 +27,3 @@ _esy
 .env.production.local
 
 **/dist
-**/.env
