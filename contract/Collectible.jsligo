@@ -136,6 +136,7 @@ namespace Storage {
       operators : Operators.t,
       token_ids : set<token_id>,
       token_countdown: nat,
+      seller: address,
       token_metadata : TokenMetadata.t,
       metadata : Metadata.t
    };
@@ -269,10 +270,25 @@ const update_ops = (updates: update_operators, s: storage): [list<operation>, st
 //   const () = failwith Errors.not_supported in
 //   ([]: operation list),s
 
-const purchase = (s: storage): [list<operation>, storage] => {
-   countdown = s.token_countdown
-   assert countdown != 0
+const mint_purchase = (s: storage): [list<operation>, storage] => {
+   let s = s
+   const countdown = s.token_countdown
+   assert(countdown != (0 as nat))
+   assert(Tezos.get_amount() == 1 as tez)
+   
+   match(is_nat(countdown - 1), {
+     None : () => assert(false)
+     Some : (n : nat) => { s.token_countdown = n }
+   })
 
+   const token_id = countdown
+   s.ledger = Big_map.update (token_id, Some (Tezos.get_sender()), s.ledger);
+
+   const seller: contract<unit> = 
+      Tezos.get_contract_with_error(s.seller, "UNDEFINED_SELLER");
+   const op = Tezos.transfer ((), 1 as tez, seller);
+
+   return [list([op]), s];
 };
 
 export type parameter =
