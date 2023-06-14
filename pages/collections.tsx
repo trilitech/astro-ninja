@@ -65,9 +65,8 @@ export default function Home() {
       <main>
         <Box>Your Collected NFTs</Box>
         <SimpleGrid columns={[2, 2, 4]} width="100%">
-          {data?.map((t) => (
-            // eslint-disable-next-line react/jsx-key
-            <GridItem>
+          {data?.map((t, index) => (
+            <GridItem key={index}>
               <Image
                 src={t.imageUrl}
                 alt="Astro Ninja"

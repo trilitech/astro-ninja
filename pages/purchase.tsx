@@ -50,7 +50,7 @@ export default function Home() {
             <p>Purchase your collectible</p>
             <Box>
               <Button colorScheme="blue" onClick={purchase}>
-                Buy for 1tez
+                Buy for 1 tez
               </Button>
             </Box>
           </Flex>

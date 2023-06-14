@@ -16,7 +16,7 @@ const inter = Inter({ subsets: ["latin"] });
 export default function Home() {
   const { address, connect } = useConnection();
   const router = useRouter();
-  const displayBelow768 = useBreakpointValue({ base: true, md: false });
+  const displayMobile = useBreakpointValue({ base: true, md: false });
 
   const claim = () => {
     if (!address) {
@@ -29,7 +29,7 @@ export default function Home() {
   return (
     <>
       <main>
-        <Flex direction={displayBelow768 ? "column" : "row"} className="hero">
+        <Flex direction={displayMobile ? "column" : "row"} className="hero">
           <Flex
             flex={1}
             padding="10px"
@@ -72,10 +72,10 @@ export default function Home() {
               </Button>
             </Box>
           </Flex>
-          {!displayBelow768 && (
+          {!displayMobile && (
             <Image src="/astroninja.png" alt="Astro Ninja" width="45%" />
           )}
-          {displayBelow768 && (
+          {displayMobile && (
             <Image
               src="/astroninja.png"
               alt="Astro Ninja"
