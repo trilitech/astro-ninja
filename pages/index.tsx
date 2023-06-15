@@ -29,7 +29,7 @@ export default function Home() {
   return (
     <>
       <main>
-        <Flex direction={displayMobile ? "column" : "row"} className="hero">
+        <Flex mt={50} mb={50} direction={displayMobile ? "column" : "row"} className="hero">
           <Flex
             flex={1}
             padding="10px"

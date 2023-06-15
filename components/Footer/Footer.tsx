@@ -1,5 +1,5 @@
 import React from "react";
-import { Box } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 import styles from "./Footer.styles";
 import TezosIcon from "@/icons/TezosIcon";
 
@@ -16,9 +16,9 @@ const Footer = () => {
         height="4px"
         boxShadow="sm"
       />
-      <p style={styles.paragraph}>Powered By</p>
+      <Text style={styles.paragraph}>Powered By</Text>
       <TezosIcon style={styles.svg} />
-      <p style={styles.rightText}>&copy; {currentYear} Tezos</p>
+      <Text style={styles.rightText}>&copy; {currentYear} Tezos</Text>
     </Box>
   );
 };

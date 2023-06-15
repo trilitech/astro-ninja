@@ -1,11 +1,10 @@
 const styles = {
   footer: {
-    padding: "20px",
-    marginTop: "50px",
+    width: "100%",
     display: "flex",
     alignItems: "center",
     justifyContent: "flex-end",
-    
+    height: "75px",
   },
   paragraph: {
     display: "inline-block",
