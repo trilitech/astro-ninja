@@ -1,9 +1,9 @@
-import { Inter } from "next/font/google";
-import { Box, Button, Image, Flex, Text } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import { Box, Button, Image, Flex, Text, Link } from "@chakra-ui/react";
 import { useConnection } from "@/packages/providers";
-import { useEffect } from "react";
-import { useState } from "react";
+import { Inter } from "next/font/google";
 import Footer from "@/components/Footer/Footer";
+import AlertIcon from "@/icons/AlertIcon";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -11,6 +11,7 @@ export default function Home() {
   const { address, callcontract } = useConnection();
   const [balance, setBalance] = useState(null);
   const [showInsufficientBalance, setShowInsufficientBalance] = useState(false);
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     if (!address) {
@@ -38,19 +39,6 @@ export default function Home() {
     fetchData();
   }, [address]);
 
-  const purchase = async () => {
-    await callcontract?.({
-      amountMutez: 1,
-      contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS ?? "",
-      id: "asd",
-    }).catch((e) => {
-      console.error(e);
-    });
-    console.log("done");
-  };
-
-  const [expanded, setExpanded] = useState(false);
-
   const handleToggle = () => {
     setExpanded(!expanded);
   };
@@ -60,7 +48,7 @@ export default function Home() {
 
   const getLinesToShow = () => {
     const lineHeight = 24;
-    const containerHeight = 3 * lineHeight;
+    const containerHeight = expanded ? "auto" : 3 * lineHeight;
     const containerStyle = {
       height: containerHeight,
       overflow: "hidden",
@@ -71,6 +59,19 @@ export default function Home() {
         <Text>{text}</Text>
       </Box>
     );
+  };
+
+  const linesToShow = expanded ? text : text.split("\n").slice(0, 3).join("\n");
+
+  const purchase = async () => {
+    await callcontract?.({
+      amountMutez: 1,
+      contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS ?? "",
+      id: "asd",
+    }).catch((e) => {
+      console.error(e);
+    });
+    console.log("done");
   };
 
   return (
@@ -115,11 +116,16 @@ export default function Home() {
             <Text fontSize="4xl" fontWeight="bold" mb="2vh">
               AstroNinja NFT
             </Text>
-            {expanded ? <Text>{text}</Text> : getLinesToShow()}
-            {text.split("\n").length > 3 && (
-              <Button mt="2vh" colorScheme="blue" onClick={handleToggle}>
-                {expanded ? "Show Less" : "Show More"}
-              </Button>
+            {getLinesToShow()}
+            {text.split("\n").length < 3 && !expanded && (
+              <Link color="#0B8378" onClick={handleToggle}>
+                <u>Show More</u>
+              </Link>
+            )}
+            {text.split("\n").length < 3 && expanded && (
+              <Link color="#0B8378" onClick={handleToggle}>
+                <u>Show Less</u>
+              </Link>
             )}
             <Box
               mt="2vh"
@@ -153,10 +159,16 @@ export default function Home() {
               </Button>
 
               {showInsufficientBalance && (
-                <Text color="red" mt="1.5vw">
-                  Insufficient balance in your Tezos wallet, top up your
-                  account. <a href="/learn-more">Learn how</a>
-                </Text>
+                <Flex alignItems="center" mt="1.5vw">
+                  <AlertIcon />
+                  <Text color="red">
+                    Insufficient balance in your Tezos wallet, top up your
+                    account.
+                    <Link href="/learn-more">
+                      <u>Learn how</u>
+                    </Link>
+                  </Text>
+                </Flex>
               )}
             </Box>
           </Flex>
