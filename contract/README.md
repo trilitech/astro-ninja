@@ -20,10 +20,14 @@ brew install ligolang/ligo/ligo
 
 2. To install this package, run 'ligo install ligo-fa'. 
 
-3. It may complain about a missing "esy" installation. You can do that by following the steps at https://esy.sh/docs/en/getting-started.html
+3. It may complain about a missing "esy" installation. You can do that by following the steps at https://esy.sh/docs/en/getting-started.html. Note: it's best to do this in a sub-directory (like contract), you may need to create an empty file for esy.json and package.json with "{}" otherwise it may complain.
 
 *Deploy Contract*
-1. In order originate the FA2 contracts from another contract you can use the CREATE_CONTRACT Michelcon instruction like this
+1. You can find a sample contract that is relevant here (https://github.com/ligolang/contract-catalogue/blob/main/lib/fa2/nft/NFT.jsligo). They are already included in the repo under "contract".
+
+2. 
+
+2. In order originate the FA2 contracts from another contract you can use the CREATE_CONTRACT Michelcon instruction like this
 
 
 
