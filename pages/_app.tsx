@@ -53,21 +53,15 @@ const NavBar = () => {
       <Box as="nav" bg="bg-surface" boxShadow="sm">
         <Box px="48px" py={{ base: "4", lg: "5" }}>
           <HStack spacing="10" justify="space-between">
-            <Text fontWeight="bold" fontSize="2xl" onClick={gotohome}>
-              ✨AstroNinja
-            </Text>
+            <Text onClick={gotohome}>AstroNinja</Text>
             {address ? (
-              <Avatar address={address} />
+              <>
+                <Avatar address={address} />{" "}
+              </>
             ) : (
               <Flex justify="right" flex="1">
                 <HStack spacing="10">
-                  <Button
-                    className="btn"
-                    variant="primary"
-                    onClick={connect}
-                    borderRadius="full"
-                    fontWeight="700"
-                  >
+                  <Button variant="primary" onClick={connect}>
                     Connect
                   </Button>
                 </HStack>
