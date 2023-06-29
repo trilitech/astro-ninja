@@ -49,11 +49,13 @@ const NavBar = () => {
   };
 
   return (
-    <Box as="section" pb={{ base: "12", md: "24" }}>
+    <Box as="section">
       <Box as="nav" bg="bg-surface" boxShadow="sm">
         <Box px="48px" py={{ base: "4", lg: "5" }}>
           <HStack spacing="10" justify="space-between">
-            <Text onClick={gotohome}>AstroNinja</Text>
+            <Text onClick={gotohome} fontSize={"1.35rem"} fontWeight={700}>
+              ✨AstroNinja
+            </Text>
             {address ? (
               <>
                 <Avatar address={address} />{" "}
@@ -61,7 +63,13 @@ const NavBar = () => {
             ) : (
               <Flex justify="right" flex="1">
                 <HStack spacing="10">
-                  <Button variant="primary" onClick={connect}>
+                  <Button
+                    variant="primary"
+                    className="btn"
+                    borderRadius="full"
+                    fontWeight="700"
+                    onClick={connect}
+                  >
                     Connect
                   </Button>
                 </HStack>
