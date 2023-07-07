@@ -3,7 +3,7 @@ const styles = {
     width: "100%",
     display: "flex",
     alignItems: "center",
-    justifyContent: "flex-end",
+    justifyContent: "flex-start",
     height: "75px",
   },
   paragraph: {
@@ -13,11 +13,6 @@ const styles = {
   svg: {
     display: "inline-block",
     verticalAlign: "middle",
-  },
-  rightText: {
-    display: "inline-block",
-    marginLeft: "auto",
-    textAlign: "right",
   },
 };
 

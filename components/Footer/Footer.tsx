@@ -18,7 +18,6 @@ const Footer = () => {
       />
       <Text style={styles.paragraph}>Powered By</Text>
       <TezosIcon style={styles.svg} />
-      <Text style={styles.rightText}>&copy; {currentYear} Tezos</Text>
     </Box>
   );
 };

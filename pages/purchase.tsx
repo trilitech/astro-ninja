@@ -1,5 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Image, Flex, Text, Link } from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import {
+  Box,
+  Button,
+  Image,
+  Flex,
+  Text,
+  Link,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+} from "@chakra-ui/react";
 import { useConnection } from "@/packages/providers";
 import { Inter } from "next/font/google";
 import Footer from "@/components/Footer/Footer";
@@ -8,10 +23,12 @@ import AlertIcon from "@/icons/AlertIcon";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
+  const router = useRouter();
   const { address, callcontract } = useConnection();
   const [balance, setBalance] = useState(null);
   const [showInsufficientBalance, setShowInsufficientBalance] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     if (!address) {
@@ -74,6 +91,19 @@ export default function Home() {
     console.log("done");
   };
 
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    router.push("/collections?address=" + address);
+  };
+
+  const gotohome = () => {
+    router.push("/");
+  };
+
   return (
     <>
       <main>
@@ -88,7 +118,7 @@ export default function Home() {
             <Box>
               <Image
                 src="/astroninja.png"
-                alt="Astro Ninja"
+                alt="AstroNinja"
                 width={360}
                 height={360}
                 borderRadius={10}
@@ -137,11 +167,78 @@ export default function Home() {
                 1.00 ꜩ
               </Text>
               <Text mb="1.5vw">Includes relevant fees</Text>
+              <Modal isOpen={isModalOpen} onClose={closeModal} size="full">
+                <ModalOverlay />
+                <ModalContent style={{ display: "flex", alignItems: "center" }}>
+                  <Flex
+                    alignItems="center"
+                    justifyContent="center"
+                    flexDirection="column"
+                    height="100%"
+                  >
+                    <ModalHeader>
+                      <Text
+                        onClick={gotohome}
+                        fontSize={"1.35rem"}
+                        fontWeight={700}
+                      >
+                        ✨AstroNinja
+                      </Text>
+                      <Flex justifyContent="flex-end">
+                        <ModalCloseButton
+                          margin="15px"
+                          borderRadius="50%"
+                          border="2px solid #DBDBDB"
+                        />
+                      </Flex>
+                    </ModalHeader>
+                    <ModalBody textAlign="center">
+                      <Text
+                        fontSize="2xl"
+                        fontWeight="bold"
+                        mt="18vh"
+                        maxWidth="300px"
+                        wordBreak="break-word"
+                      >
+                        Congratulations!
+                      </Text>
+                      <Text
+                        fontSize="md"
+                        mt={4}
+                        maxWidth="300px"
+                        wordBreak="break-word"
+                      >
+                        You have successfully purchased your collectible
+                      </Text>
+                      <Flex alignItems="center" justifyContent="center" mt={4}>
+                        <Image
+                          src="/astroninja.png"
+                          alt="Astro Ninja"
+                          width={300}
+                          height={300}
+                        />
+                      </Flex>
+                    </ModalBody>
+                    <ModalFooter>
+                      <Button
+                        onClick={closeModal}
+                        width="100%"
+                        background="transparent"
+                        textDecoration="underline"
+                        color="#0B8378"
+                        _hover={{ background: "transparent" }}
+                      >
+                        View in your Collection
+                      </Button>
+                    </ModalFooter>
+                  </Flex>
+                </ModalContent>
+              </Modal>
               <Button
                 className="btn"
                 width="100%"
                 borderRadius="full"
-                onClick={!showInsufficientBalance ? purchase : undefined}
+                onClick={openModal}
                 fontWeight="700"
                 disabled={showInsufficientBalance}
                 bg={showInsufficientBalance ? "#C5C5C5" : ""}
@@ -159,14 +256,10 @@ export default function Home() {
               </Button>
 
               {showInsufficientBalance && (
-                <Flex alignItems="center" mt="1.5vw">
+                <Flex alignItems="center" mt="15px">
                   <AlertIcon />
-                  <Text color="red">
-                    Insufficient balance in your Tezos wallet, top up your
-                    account.
-                    <Link href="/learn-more">
-                      <u>Learn how</u>
-                    </Link>
+                  <Text color="red" mb="15px">
+                    Insufficient balance.
                   </Text>
                 </Flex>
               )}

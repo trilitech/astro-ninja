@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   Box,
   Text,
@@ -6,6 +7,8 @@ import {
   IconButton,
   Image,
   Stack,
+  Flex,
+  Button,
 } from "@chakra-ui/react";
 import {
   Menu,
@@ -19,6 +22,9 @@ import {
 } from "@chakra-ui/react";
 import { ConnectionProvider, useConnection } from "@/packages/providers";
 import { useRouter } from "next/router";
+import ChevronIcon from "@/icons/ChevronIcon";
+import CopyFileIcon from "@/icons/CopyFileIcon";
+import WindowIcon from "@/icons/WindowIcon";
 
 const sizes = {
   "50px": {
@@ -76,9 +82,38 @@ export const Avatar = ({ address }: { address: string }) => {
     router.push("/collections?address=" + address);
   };
 
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const account = router.query.address as string;
+  const [copied, setCopied] = useState(false);
+
+  const CopyToClipboard = () => {
+    const addressToCopy = account;
+    navigator.clipboard
+      .writeText(addressToCopy)
+      .then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      })
+      .catch((error) => {
+        console.error("Failed to copy:", error);
+      });
+  };
+
   return (
     <Stack direction="row" alignItems="center">
-      <Box ml="-15px" fontWeight="medium" fontSize="0.85rem" >My profile</Box>
+      <Box
+        ml="-15px"
+        fontWeight="bold"
+        fontSize="20px"
+        onClick={viewcollection}
+      >
+        My profile
+      </Box>
       <Menu>
         <MenuButton>
           <HStack spacing="-1" mr="6px">
@@ -93,9 +128,113 @@ export const Avatar = ({ address }: { address: string }) => {
             </OuterCircle>
           </HStack>
         </MenuButton>
-        <MenuList>
-          <MenuItem onClick={viewcollection}>View Collection</MenuItem>
-          <MenuItem onClick={disconnect}>Disconnect</MenuItem>
+        <MenuList
+          style={{
+            width: "30vw",
+            margin: "25px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <OuterCircle w="50px" h="50px" margin="15px" bg="background">
+            <InnerCircle
+              w="30px"
+              h="30px"
+              style={{
+                background: "linear-gradient(to right, red, yellow)",
+              }}
+            ></InnerCircle>
+          </OuterCircle>
+
+          <Box style={{ position: "relative" }}>
+            <Text
+              mt="2"
+              border="1px solid #C5C5C5"
+              borderRadius="70px"
+              padding="5px"
+              textAlign="center"
+              width="177px"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              onClick={toggleDropdown}
+              cursor="pointer"
+              mb="4"
+            >
+              <span>{address.substring(0, 3) + ".." + address.slice(-5)}</span>
+              <Box marginLeft="5px">
+                <ChevronIcon />
+              </Box>
+            </Text>
+
+            {isOpen && (
+              <Box
+                width="100%"
+                position="absolute"
+                top="100%"
+                left="0"
+                marginTop="5px"
+                borderRadius="md"
+                padding="2"
+                backgroundColor="#FFFFFF"
+                boxShadow="0px 2px 4px rgba(0, 0, 0, 0.1)"
+                zIndex="999"
+              >
+                <Button width="100%" background="transparent">
+                  <span
+                    style={{ display: "inline-flex", alignItems: "flex-start" }}
+                    onClick={CopyToClipboard}
+                  >
+                    <CopyFileIcon />
+                    {copied ? "Copied!" : "Copy wallet address"}
+                  </span>
+                </Button>
+                <Button
+                  width="100%"
+                  paddingRight="50px"
+                  background="transparent"
+                  onClick={() =>
+                    window.open(`https://tzkt.io/${account}`, "_blank")
+                  }
+                >
+                  <span
+                    style={{ display: "inline-flex", alignItems: "flex-start" }}
+                  >
+                    <WindowIcon /> Open in tzkt.io
+                  </span>
+                </Button>
+              </Box>
+            )}
+          </Box>
+
+          <Flex flexWrap="wrap"></Flex>
+          <Box
+            marginTop="15px"
+            width="80%"
+            borderBottom="1px solid #DBDBDB"
+            margin="auto"
+            marginBottom="25px"
+            position="relative"
+          ></Box>
+          <MenuItem
+            onClick={disconnect}
+            mt="2"
+            fontWeight="700"
+            border="1px solid #95949A"
+            borderRadius="70px"
+            padding="5px"
+            textAlign="center"
+            width="80%"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            padding="10px"
+            cursor="pointer"
+            mb="4"
+          >
+            Disconnect wallet
+          </MenuItem>
         </MenuList>
       </Menu>
     </Stack>
