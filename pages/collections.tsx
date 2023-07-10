@@ -12,6 +12,7 @@ import {
   ModalHeader,
   ModalCloseButton,
   ModalBody,
+  BoxProps,
   Grid,
   GridItem,
 } from "@chakra-ui/react";
@@ -77,11 +78,12 @@ export default function Home() {
       .then((output) => {
         const formattedData: Token[] = output
           .map((current) => {
-            const thumbnailUri = current.token?.metadata.thumbnailUri as string;
+            const thumbnailUri = current.token?.metadata
+              ?.thumbnailUri as string;
             if (!thumbnailUri) return null;
             const cid = thumbnailUri.split("//");
             return {
-              name: current.token?.metadata.name,
+              name: current.token?.metadata?.name,
               imageUrl: `https://ipfs.io/ipfs/${cid[1]}`,
             };
           })
@@ -168,9 +170,7 @@ export default function Home() {
               cursor="pointer"
             >
               <span>{formattedAddress}</span>
-              <Box marginLeft="50px">
-                <ChevronIcon />
-              </Box>
+              <ChevronIcon />
             </Text>
 
             {isOpen && (
@@ -199,7 +199,10 @@ export default function Home() {
                   background="transparent"
                   paddingRight="50px"
                   onClick={() =>
-                    window.open(`https://tzkt.io/${account}`, "_blank")
+                    window.open(
+                      `https://${process.env.NEXT_PUBLIC_NETWORK}.tzkt.io/${account}`,
+                      "_blank"
+                    )
                   }
                 >
                   <span
@@ -291,7 +294,6 @@ export default function Home() {
           {Array.from({ length: 1 }).map((_, outerIndex) =>
             data?.map((t, innerIndex) => (
               <Box
-                key={index}
                 width={{ base: "100%", md: "25%" }}
                 height="auto"
                 bg="white"
@@ -317,9 +319,9 @@ export default function Home() {
               </Box>
             ))
           )}
-          {data.map((t, index) => (
+          {data.map((t, innerIndex) => (
             <Box
-              key={index}
+              key={innerIndex}
               width="calc(25% - 10%)"
               height="200px"
               bg="white"
@@ -341,12 +343,12 @@ export default function Home() {
           ))}
         </Flex>
       </main>
-      {data?.map((t, index) => (
+      {data?.map((t, innerIndex) => (
         <Modal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           size="50%"
-          key={index}
+          key={innerIndex}
         >
           <ModalOverlay />
           <ModalContent maxW="60%">
