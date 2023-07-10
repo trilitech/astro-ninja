@@ -25,6 +25,7 @@ import { useRouter } from "next/router";
 import ChevronIcon from "@/icons/ChevronIcon";
 import CopyFileIcon from "@/icons/CopyFileIcon";
 import WindowIcon from "@/icons/WindowIcon";
+import { env } from "process";
 
 const sizes = {
   "50px": {
@@ -108,16 +109,22 @@ export const Avatar = ({ address }: { address: string }) => {
     <Stack direction="row" alignItems="center">
       <Box
         ml="-15px"
-        fontWeight="bold"
-        fontSize="20px"
+        fontSize="17px"
         onClick={viewcollection}
+        _hover={{ color: "#45E8DC" }}
+        transition="color 0.3s"
       >
         My profile
       </Box>
       <Menu>
         <MenuButton>
           <HStack spacing="-1" mr="6px">
-            <OuterCircle w="50px" h="50px" bg="background">
+            <OuterCircle
+              w="50px"
+              h="50px"
+              bg="background"
+              _hover={{ border: "1px solid #45E8DC" }}
+            >
               <InnerCircle
                 w="30px"
                 h="30px"
@@ -195,7 +202,10 @@ export const Avatar = ({ address }: { address: string }) => {
                   paddingRight="50px"
                   background="transparent"
                   onClick={() =>
-                    window.open(`https://tzkt.io/${account}`, "_blank")
+                    window.open(
+                      `https://${process.env.NEXT_PUBLIC_NETWORK}.tzkt.io/${address}`,
+                      "_blank"
+                    )
                   }
                 >
                   <span

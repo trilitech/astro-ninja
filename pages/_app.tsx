@@ -51,9 +51,9 @@ const NavBar = () => {
   return (
     <Box as="section">
       <Box as="nav" bg="bg-surface" boxShadow="sm">
-        <Box px="1vw" py={{ base: "4", lg: "5" }}>
+        <Box px="4vw" py={{ base: "4", lg: "5" }}>
           <HStack spacing="10" justify="space-between">
-            <Text onClick={gotohome} fontSize={"1.7rem"} fontWeight={700}>
+            <Text onClick={gotohome} fontSize={"1.6rem"} fontWeight={700}>
               ✨AstroNinja
             </Text>
             {address ? (

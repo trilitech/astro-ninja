@@ -9,6 +9,7 @@ const styles = {
   paragraph: {
     display: "inline-block",
     marginRight: "15px",
+    marginLeft: "4vw",
   },
   svg: {
     display: "inline-block",
