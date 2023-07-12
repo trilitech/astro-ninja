@@ -16,6 +16,11 @@ import {
   Grid,
   GridItem,
 } from "@chakra-ui/react";
+
+import { defaults } from "@tzkt/sdk-api";
+
+defaults.baseUrl = `https://api.${process.env.NEXT_PUBLIC_NETWORK}.tzkt.io/`;
+
 import { tokensGetTokenBalances } from "@tzkt/sdk-api";
 import { useRouter } from "next/router";
 import { TezosToolkit } from "@taquito/taquito";
@@ -32,7 +37,10 @@ const inter = Inter({ subsets: ["latin"] });
 
 type Token = {
   name?: string;
+  description: string;
   imageUrl: string;
+  contractAddress: string;
+  mintDate: string;
 };
 
 export default function Home() {
@@ -45,6 +53,11 @@ export default function Home() {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [savedImageUrl, setSavedImageUrl] = useState("");
+  const [savedName, setSavedName] = useState("");
+  const [savedContractAddress, setSavedContractAddress] = useState("");
+  const [savedDescription, setSavedDescription] = useState("");
+  const [savedMintDate, setSavedMintDate] = useState("");
 
   const CopyToClipboard = () => {
     const addressToCopy = account;
@@ -73,6 +86,9 @@ export default function Home() {
       account: {
         eq: account,
       },
+      balance: {
+        gt: 0,
+      },
       limit,
     })
       .then((output) => {
@@ -84,7 +100,10 @@ export default function Home() {
             const cid = thumbnailUri.split("//");
             return {
               name: current.token?.metadata?.name,
+              description: current.token?.metadata?.description,
               imageUrl: `https://ipfs.io/ipfs/${cid[1]}`,
+              contractAddress: current.token?.contract?.address,
+              mintDate: current.firstTime,
             };
           })
           .filter((e) => !!e) as Token[];
@@ -267,17 +286,7 @@ export default function Home() {
                 Your digital collectibles will appear here...
               </Text>
             </>
-          ) : (
-            <Text
-              width="70%"
-              margin="0 auto"
-              marginTop="10px"
-              fontWeight="400"
-              color="#95949A"
-            >
-              Your digital collectibles will appear here...
-            </Text>
-          )}
+          ) : null}
         </>
 
         <Flex
@@ -291,56 +300,53 @@ export default function Home() {
             },
           }}
         >
-          {Array.from({ length: 1 }).map((_, outerIndex) =>
-            data?.map((t, innerIndex) => (
-              <Box
-                width={{ base: "100%", md: "25%" }}
-                height="auto"
-                bg="white"
-                borderRadius="md"
-                mb="2"
-                marginRight={{ base: "0", md: "5%" }}
-                display="flex"
-                justifyContent="center"
-                flexDirection="column"
-                boxShadow="0px 2px 4px rgba(0, 0, 0, 0.1)"
-                onClick={() => setIsModalOpen(true)}
-              >
-                <Image
-                  src={t.imageUrl}
-                  w="100%"
-                  h="100%"
-                  borderTopLeftRadius="md"
-                  borderTopRightRadius="md"
-                />
-                <Text margin="15px" fontWeight="bold">
-                  {t.name}
-                </Text>
-              </Box>
-            ))
-          )}
-          {data.map((t, innerIndex) => (
+          {data?.map((t, outerIndex) => (
             <Box
-              key={innerIndex}
-              width="calc(25% - 10%)"
-              height="200px"
+              key={outerIndex}
+              width={{ base: "100%", md: "28%" }}
+              height="auto"
               bg="white"
-              border="1px"
-              borderColor="gray.200"
               borderRadius="md"
               mb="2"
-              marginRight="5%"
-              marginLeft="5%"
+              marginRight={{ base: "0", md: "5%" }}
               display="flex"
-              alignItems="center"
               justifyContent="center"
               flexDirection="column"
+              boxShadow="0px 2px 4px rgba(0, 0, 0, 0.1)"
+              onClick={() => {
+                setIsModalOpen(true);
+                localStorage.setItem("imageUrl", t.imageUrl);
+                localStorage.setItem("contractAddress", t.contractAddress);
+                localStorage.setItem("description", t.description);
+                localStorage.setItem("mintDate", t.mintDate);
+                if (t.name) {
+                  localStorage.setItem("name", t.name);
+                  setSavedName(t.name);
+                } else {
+                  localStorage.setItem("name", "");
+                  setSavedName("");
+                }
+                setSavedImageUrl(t.imageUrl);
+                setSavedContractAddress(t.contractAddress);
+                setSavedDescription(t.description);
+                setSavedMintDate(t.mintDate);
+              }}
             >
-              <Text mt="2" textAlign="center" fontWeight="bold">
-                {t.name || "Unknown Title"}
+              <Image
+                src={t.imageUrl}
+                alt=""
+                w="100%"
+                h="100%"
+                borderTopLeftRadius="md"
+                borderTopRightRadius="md"
+                objectFit="contain"
+              />
+              <Text margin="15px" fontWeight="bold">
+                {t.name}
               </Text>
             </Box>
           ))}
+          {data.length === 0 && null}
         </Flex>
       </main>
       {data?.map((t, innerIndex) => (
@@ -360,10 +366,12 @@ export default function Home() {
               >
                 <Box flex={["0 0 100%", "0 0 100%", "0 0 50%"]}>
                   <Image
-                    src={t.imageUrl}
+                    src={savedImageUrl}
+                    alt=""
                     borderTopLeftRadius="md"
                     boxSize="100%"
-                    objectFit="cover"
+                    maxHeight="50vh"
+                    objectFit="contain"
                   />
                 </Box>
                 <Box margin="15px">
@@ -396,14 +404,9 @@ export default function Home() {
                     </Box>
                   </Text>
                   <Text fontWeight="bold" fontSize="2xl">
-                    {t.name}
+                    {savedName}
                   </Text>
-                  <Text>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Phasellus sed lacus eget est consectetur ornare. Praesent
-                    imperdiet porta ligula a dapibus. Etiam semper nisl nisi,
-                    sed ullamcorper felis facilisis.
-                  </Text>
+                  <Text>{savedDescription}</Text>
                 </Box>
               </Flex>
 
@@ -441,7 +444,11 @@ export default function Home() {
                           <OpenLinkIcon />
                         </Flex>
                         <Text color="#0B8378" textDecoration="underline">
-                          KT1Pm2H31abC73TfgiJTJrKfzozobFxfFy5a
+                          <a
+                            href={`https://${process.env.NEXT_PUBLIC_NETWORK}.tzkt.io/${savedContractAddress}`}
+                          >
+                            {savedContractAddress}
+                          </a>
                         </Text>
                       </Flex>
                     </GridItem>
@@ -457,7 +464,11 @@ export default function Home() {
                           <OpenLinkIcon />
                         </Flex>
                         <Text color="#0B8378" textDecoration="underline">
-                          QmWNfGezXoNe8W99BWSdYEfirRaAP8H7c...
+                          <a href={`${savedImageUrl}`}>
+                            {savedImageUrl.length > 39
+                              ? `${savedImageUrl.slice(0, 39)}...`
+                              : savedImageUrl}
+                          </a>
                         </Text>
                       </Flex>
                     </GridItem>
@@ -472,7 +483,7 @@ export default function Home() {
                           <Text>NETWORK</Text>
                           <OpenLinkIcon />
                         </Flex>
-                        <Text>ghostnet</Text>
+                        <Text>{process.env.NEXT_PUBLIC_NETWORK}</Text>
                       </Flex>
                     </GridItem>
                     <GridItem>
@@ -483,12 +494,14 @@ export default function Home() {
                         height="100%"
                       >
                         <Flex justifyContent="flex-start" alignItems="center">
-                          <Text>MINT TX</Text>
+                          <Text>MINTED</Text>
                           <OpenLinkIcon />
                         </Flex>
-                        <Text color="#0B8378" textDecoration="underline">
-                          oon8BWUZUL5eGGRDCzb8S16RnJymdRM...
-                        </Text>
+                        <Text>
+                          
+                        {savedMintDate.length > 10
+                              ? `${savedMintDate.slice(0, 10)}`
+                              : savedMintDate}</Text>
                       </Flex>
                     </GridItem>
                     <GridItem>
@@ -499,11 +512,16 @@ export default function Home() {
                         height="100%"
                       >
                         <Flex justifyContent="flex-start" alignItems="center">
-                          <Text>IPFS METADATA</Text>
+                          <Text>METADATA</Text>
                           <OpenLinkIcon />
                         </Flex>
                         <Text color="#0B8378" textDecoration="underline">
-                          QmWNfGezXoNe8W99BWSdYEfirRaAP8H7c...
+                          <a
+                            href={`
+                            https://${process.env.NEXT_PUBLIC_NETWORK}.tzkt.io/${savedContractAddress}/tokens/0/metadata`}
+                          >
+                            {savedContractAddress}
+                          </a>
                         </Text>
                       </Flex>
                     </GridItem>

@@ -239,7 +239,6 @@ export const Avatar = ({ address }: { address: string }) => {
             display="flex"
             alignItems="center"
             justifyContent="center"
-            padding="10px"
             cursor="pointer"
             mb="4"
           >
