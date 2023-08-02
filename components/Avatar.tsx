@@ -9,6 +9,7 @@ import {
   Stack,
   Flex,
   Button,
+  background,
 } from "@chakra-ui/react";
 import {
   Menu,
@@ -111,9 +112,11 @@ export const Avatar = ({ address }: { address: string }) => {
         ml="-15px"
         fontSize="17px"
         onClick={viewcollection}
-        background={'transparent'}
-        _hover={{ color: "#45E8DC" }}
-        transition="color 0.3s"
+        style={{
+          background: "transparent",
+          transition: "color 0.3s",
+        }}
+        _hover={{ color: "#45E8DC", background: "transparent" }}
       >
         My profile
       </Button>
