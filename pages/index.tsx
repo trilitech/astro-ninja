@@ -13,7 +13,7 @@ import Footer from "../components/Footer/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Home() {
+export default function Index() {
   const { address, connect } = useConnection();
   const router = useRouter();
   const displayMobile = useBreakpointValue({ base: true, md: false });

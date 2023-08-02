@@ -22,7 +22,7 @@ import AlertIcon from "@/icons/AlertIcon";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Home() {
+export default function Purchase() {
   const router = useRouter();
   const { address, callcontract } = useConnection();
   const [balance, setBalance] = useState(null);
