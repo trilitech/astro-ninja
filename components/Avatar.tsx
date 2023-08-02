@@ -107,15 +107,16 @@ export const Avatar = ({ address }: { address: string }) => {
 
   return (
     <Stack direction="row" alignItems="center">
-      <Box
+      <Button
         ml="-15px"
         fontSize="17px"
         onClick={viewcollection}
+        background={'transparent'}
         _hover={{ color: "#45E8DC" }}
         transition="color 0.3s"
       >
         My profile
-      </Box>
+      </Button>
       <Menu>
         <MenuButton>
           <HStack spacing="-1" mr="6px">
@@ -155,7 +156,7 @@ export const Avatar = ({ address }: { address: string }) => {
           </OuterCircle>
 
           <Box style={{ position: "relative" }}>
-            <Text
+            <Box
               mt="2"
               border="1px solid #C5C5C5"
               borderRadius="70px"
@@ -173,7 +174,7 @@ export const Avatar = ({ address }: { address: string }) => {
               <Box marginLeft="5px">
                 <ChevronIcon />
               </Box>
-            </Text>
+            </Box>
 
             {isOpen && (
               <Box
