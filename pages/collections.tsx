@@ -300,8 +300,9 @@ export default function Collections() {
             },
           }}
         >
-          {data?.map((t, outerIndex) => (
+          {data?.map((t) => (
             <Box
+              key={t.contractAddress}
               width={{ base: "100%", md: "28%" }}
               height="auto"
               bg="white"
