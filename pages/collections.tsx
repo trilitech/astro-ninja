@@ -87,7 +87,7 @@ export default function Collections() {
         eq: account,
       },
       balance: {
-        gt: 0,
+        gt: '0',
       },
       limit,
     })

@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "@chakra-ui/storybook-addon": "^4.0.16",
-    "eslint": "^7.32.0"
-    "lint": "^0.8.19",
+    "eslint": "^7.32.0",
+    "lint": "^0.8.19"
   }
 }

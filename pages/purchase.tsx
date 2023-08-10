@@ -25,7 +25,7 @@ const inter = Inter({ subsets: ["latin"] });
 export default function Purchase() {
   const router = useRouter();
   const { address, callcontract } = useConnection();
-  const [balance, setBalance] = useState(null);
+  const [balance, setBalance] = useState<number | null>(null);
   const [showInsufficientBalance, setShowInsufficientBalance] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -43,7 +43,7 @@ export default function Purchase() {
         const data = await response.json();
         setBalance(data / 1000000);
 
-        if (data < 1) {
+        if (data / 1000000 < 1) {
           setShowInsufficientBalance(true);
         } else {
           setShowInsufficientBalance(false);
