@@ -40,10 +40,12 @@ export default function Purchase() {
         const response = await fetch(
           `https://api.tzkt.io/v1/accounts/${address}/balance`
         );
-        const data = await response.json();
-        setBalance(data / 1000000);
+        const MUTEZ = 1000000;
+        const MUTEZBalance = await response.json();
+        const FinalBalance = MUTEZBalance / MUTEZ;
+        setBalance(FinalBalance);
 
-        if (data / 1000000 < 1) {
+        if (FinalBalance < 1) {
           setShowInsufficientBalance(true);
         } else {
           setShowInsufficientBalance(false);
