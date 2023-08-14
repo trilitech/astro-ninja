@@ -53,9 +53,18 @@ const NavBar = () => {
       <Box as="nav" bg="bg-surface" boxShadow="sm">
         <Box px="4vw" py={{ base: "4", lg: "5" }}>
           <HStack spacing="10" justify="space-between">
-            <Text onClick={gotohome} fontSize={"1.6rem"} fontWeight={700}>
+            <Button
+              onClick={gotohome}
+              style={{
+                fontSize: "1.6rem",
+                fontWeight: 700,
+                background: "transparent",
+                cursor: "pointer",
+              }}
+            >
               ✨AstroNinja
-            </Text>
+            </Button>
+
             {address ? (
               <>
                 <Avatar address={address} />

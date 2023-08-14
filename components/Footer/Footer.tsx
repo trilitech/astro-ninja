@@ -4,8 +4,6 @@ import styles from "./Footer.styles";
 import TezosIcon from "@/icons/TezosIcon";
 
 const Footer = () => {
-  const currentYear = new Date().getFullYear();
-
   return (
     <Box as="footer" style={styles.footer} position="relative" py={4} px={6}>
       <Box
@@ -17,7 +15,9 @@ const Footer = () => {
         boxShadow="sm"
       />
       <Text style={styles.paragraph}>Powered By</Text>
-      <TezosIcon style={styles.svg} />
+      <Box style={styles.svg}>
+        <TezosIcon />
+      </Box>
     </Box>
   );
 };

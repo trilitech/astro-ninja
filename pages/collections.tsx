@@ -43,7 +43,7 @@ type Token = {
   mintDate: string;
 };
 
-export default function Home() {
+export default function Collections() {
   const router = useRouter();
   const account = router.query.address as string;
   const [data, setData] = useState<Token[]>([]);
@@ -87,7 +87,7 @@ export default function Home() {
         eq: account,
       },
       balance: {
-        gt: 0,
+        gt: '0',
       },
       limit,
     })
@@ -300,9 +300,9 @@ export default function Home() {
             },
           }}
         >
-          {data?.map((t, outerIndex) => (
+          {data?.map((t) => (
             <Box
-              key={outerIndex}
+              key={t.contractAddress}
               width={{ base: "100%", md: "28%" }}
               height="auto"
               bg="white"
@@ -315,17 +315,6 @@ export default function Home() {
               boxShadow="0px 2px 4px rgba(0, 0, 0, 0.1)"
               onClick={() => {
                 setIsModalOpen(true);
-                localStorage.setItem("imageUrl", t.imageUrl);
-                localStorage.setItem("contractAddress", t.contractAddress);
-                localStorage.setItem("description", t.description);
-                localStorage.setItem("mintDate", t.mintDate);
-                if (t.name) {
-                  localStorage.setItem("name", t.name);
-                  setSavedName(t.name);
-                } else {
-                  localStorage.setItem("name", "");
-                  setSavedName("");
-                }
                 setSavedImageUrl(t.imageUrl);
                 setSavedContractAddress(t.contractAddress);
                 setSavedDescription(t.description);
@@ -349,200 +338,196 @@ export default function Home() {
           {data.length === 0 && null}
         </Flex>
       </main>
-      {data?.map((t, innerIndex) => (
-        <Modal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          size="50%"
-          key={innerIndex}
-        >
-          <ModalOverlay />
-          <ModalContent maxW="60%">
-            <ModalCloseButton />
-            <ModalBody padding="0">
-              <Flex
-                flexDirection={["column", "column", "row"]}
-                alignItems="center"
-              >
-                <Box flex={["0 0 100%", "0 0 100%", "0 0 50%"]}>
-                  <Image
-                    src={savedImageUrl}
-                    alt=""
-                    borderTopLeftRadius="md"
-                    boxSize="100%"
-                    maxHeight="50vh"
-                    objectFit="contain"
-                  />
-                </Box>
-                <Box margin="15px">
-                  <Text
-                    mt="4"
-                    mb="4"
-                    border="1px solid #C5C5C5"
-                    borderRadius="70px"
-                    textAlign="center"
-                    display="flex"
-                    width="210px"
-                    alignItems="center"
-                    justifyContent="center"
-                    onClick={toggleDropdown}
-                    cursor="pointer"
-                  >
-                    <Box display="flex" alignItems="center">
-                      <OuterCircle border="0" w="40px" h="40px">
-                        <InnerCircle
-                          style={{
-                            background:
-                              "linear-gradient(to right, red, yellow)",
-                          }}
-                        ></InnerCircle>
-                      </OuterCircle>
-                      <Box
-                        ml="2"
-                        fontSize="small"
-                      >{`Collected by ${formattedAddress}`}</Box>
-                    </Box>
-                  </Text>
-                  <Text fontWeight="bold" fontSize="2xl">
-                    {savedName}
-                  </Text>
-                  <Text>{savedDescription}</Text>
-                </Box>
-              </Flex>
-
-              {isDetailsOpen && (
-                <Box mt={4} display="flex" justifyContent="center">
-                  <Grid
-                    templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }}
-                    gap={4}
-                    textAlign="center"
-                    fontSize="1.2vh"
-                  >
-                    <GridItem>
-                      <Flex
-                        flexDirection="column"
-                        alignItems="flex-start"
-                        justifyContent="center"
-                        height="100%"
-                      >
-                        <Flex justifyContent="flex-start" alignItems="center">
-                          <Text>BLOCKCHAIN</Text>
-                          <OpenLinkIcon />
-                        </Flex>
-                        <Text>Tezos</Text>
-                      </Flex>
-                    </GridItem>
-                    <GridItem>
-                      <Flex
-                        flexDirection="column"
-                        alignItems="flex-start"
-                        justifyContent="center"
-                        height="100%"
-                      >
-                        <Flex justifyContent="flex-start" alignItems="center">
-                          <Text>CONTRACT</Text>
-                          <OpenLinkIcon />
-                        </Flex>
-                        <Text color="#0B8378" textDecoration="underline">
-                          <a
-                            href={`https://${process.env.NEXT_PUBLIC_NETWORK}.tzkt.io/${savedContractAddress}`}
-                          >
-                            {savedContractAddress}
-                          </a>
-                        </Text>
-                      </Flex>
-                    </GridItem>
-                    <GridItem>
-                      <Flex
-                        flexDirection="column"
-                        alignItems="flex-start"
-                        justifyContent="center"
-                        height="100%"
-                      >
-                        <Flex justifyContent="flex-start" alignItems="center">
-                          <Text>IPFS</Text>
-                          <OpenLinkIcon />
-                        </Flex>
-                        <Text color="#0B8378" textDecoration="underline">
-                          <a href={`${savedImageUrl}`}>
-                            {savedImageUrl.length > 39
-                              ? `${savedImageUrl.slice(0, 39)}...`
-                              : savedImageUrl}
-                          </a>
-                        </Text>
-                      </Flex>
-                    </GridItem>
-                    <GridItem>
-                      <Flex
-                        flexDirection="column"
-                        alignItems="flex-start"
-                        justifyContent="center"
-                        height="100%"
-                      >
-                        <Flex justifyContent="flex-start" alignItems="center">
-                          <Text>NETWORK</Text>
-                          <OpenLinkIcon />
-                        </Flex>
-                        <Text>{process.env.NEXT_PUBLIC_NETWORK}</Text>
-                      </Flex>
-                    </GridItem>
-                    <GridItem>
-                      <Flex
-                        flexDirection="column"
-                        alignItems="flex-start"
-                        justifyContent="center"
-                        height="100%"
-                      >
-                        <Flex justifyContent="flex-start" alignItems="center">
-                          <Text>MINTED</Text>
-                          <OpenLinkIcon />
-                        </Flex>
-                        <Text>
-                          
-                        {savedMintDate.length > 10
-                              ? `${savedMintDate.slice(0, 10)}`
-                              : savedMintDate}</Text>
-                      </Flex>
-                    </GridItem>
-                    <GridItem>
-                      <Flex
-                        flexDirection="column"
-                        alignItems="flex-start"
-                        justifyContent="center"
-                        height="100%"
-                      >
-                        <Flex justifyContent="flex-start" alignItems="center">
-                          <Text>METADATA</Text>
-                          <OpenLinkIcon />
-                        </Flex>
-                        <Text color="#0B8378" textDecoration="underline">
-                          <a
-                            href={`
-                            https://${process.env.NEXT_PUBLIC_NETWORK}.tzkt.io/${savedContractAddress}/tokens/0/metadata`}
-                          >
-                            {savedContractAddress}
-                          </a>
-                        </Text>
-                      </Flex>
-                    </GridItem>
-                  </Grid>
-                </Box>
-              )}
-
-              <Flex justifyContent="center" mb={4} mt={4}>
-                <Button
-                  onClick={() => setIsDetailsOpen(!isDetailsOpen)}
-                  bg="transparent"
-                  color="#0B8378"
-                  _hover={{ bg: "transparent" }}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        size="50%"
+      >
+        <ModalOverlay />
+        <ModalContent maxW="60%">
+          <ModalCloseButton />
+          <ModalBody padding="0">
+            <Flex
+              flexDirection={["column", "column", "row"]}
+              alignItems="center"
+            >
+              <Box flex={["0 0 100%", "0 0 100%", "0 0 50%"]}>
+                <Image
+                  src={savedImageUrl}
+                  alt=""
+                  borderTopLeftRadius="md"
+                  boxSize="100%"
+                  maxHeight="50vh"
+                  objectFit="contain"
+                />
+              </Box>
+              <Box margin="15px">
+                <Text
+                  mt="4"
+                  mb="4"
+                  border="1px solid #C5C5C5"
+                  borderRadius="70px"
+                  textAlign="center"
+                  display="flex"
+                  width="210px"
+                  alignItems="center"
+                  justifyContent="center"
+                  onClick={toggleDropdown}
+                  cursor="pointer"
                 >
-                  {isDetailsOpen ? "Close" : "Collectible Details"}
-                </Button>
-              </Flex>
-            </ModalBody>
-          </ModalContent>
-        </Modal>
-      ))}
+                  <Box display="flex" alignItems="center">
+                    <OuterCircle border="0" w="40px" h="40px">
+                      <InnerCircle
+                        style={{
+                          background: "linear-gradient(to right, red, yellow)",
+                        }}
+                      ></InnerCircle>
+                    </OuterCircle>
+                    <Box
+                      ml="2"
+                      fontSize="small"
+                    >{`Collected by ${formattedAddress}`}</Box>
+                  </Box>
+                </Text>
+                <Text fontWeight="bold" fontSize="2xl">
+                  {savedName}
+                </Text>
+                <Text>{savedDescription}</Text>
+              </Box>
+            </Flex>
+
+            {isDetailsOpen && (
+              <Box mt={4} display="flex" justifyContent="center">
+                <Grid
+                  templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }}
+                  gap={4}
+                  textAlign="center"
+                  fontSize="1.2vh"
+                >
+                  <GridItem>
+                    <Flex
+                      flexDirection="column"
+                      alignItems="flex-start"
+                      justifyContent="center"
+                      height="100%"
+                    >
+                      <Flex justifyContent="flex-start" alignItems="center">
+                        <Text>BLOCKCHAIN</Text>
+                        <OpenLinkIcon />
+                      </Flex>
+                      <Text>Tezos</Text>
+                    </Flex>
+                  </GridItem>
+                  <GridItem>
+                    <Flex
+                      flexDirection="column"
+                      alignItems="flex-start"
+                      justifyContent="center"
+                      height="100%"
+                    >
+                      <Flex justifyContent="flex-start" alignItems="center">
+                        <Text>CONTRACT</Text>
+                        <OpenLinkIcon />
+                      </Flex>
+                      <Text color="#0B8378" textDecoration="underline">
+                        <a
+                          href={`https://${process.env.NEXT_PUBLIC_NETWORK}.tzkt.io/${savedContractAddress}`}
+                        >
+                          {savedContractAddress}
+                        </a>
+                      </Text>
+                    </Flex>
+                  </GridItem>
+                  <GridItem>
+                    <Flex
+                      flexDirection="column"
+                      alignItems="flex-start"
+                      justifyContent="center"
+                      height="100%"
+                    >
+                      <Flex justifyContent="flex-start" alignItems="center">
+                        <Text>IPFS</Text>
+                        <OpenLinkIcon />
+                      </Flex>
+                      <Text color="#0B8378" textDecoration="underline">
+                        <a href={`${savedImageUrl}`}>
+                          {savedImageUrl.length > 39
+                            ? `${savedImageUrl.slice(0, 39)}...`
+                            : savedImageUrl}
+                        </a>
+                      </Text>
+                    </Flex>
+                  </GridItem>
+                  <GridItem>
+                    <Flex
+                      flexDirection="column"
+                      alignItems="flex-start"
+                      justifyContent="center"
+                      height="100%"
+                    >
+                      <Flex justifyContent="flex-start" alignItems="center">
+                        <Text>NETWORK</Text>
+                        <OpenLinkIcon />
+                      </Flex>
+                      <Text>{process.env.NEXT_PUBLIC_NETWORK}</Text>
+                    </Flex>
+                  </GridItem>
+                  <GridItem>
+                    <Flex
+                      flexDirection="column"
+                      alignItems="flex-start"
+                      justifyContent="center"
+                      height="100%"
+                    >
+                      <Flex justifyContent="flex-start" alignItems="center">
+                        <Text>MINTED</Text>
+                        <OpenLinkIcon />
+                      </Flex>
+                      <Text>
+                        {savedMintDate.length > 10
+                          ? `${savedMintDate.slice(0, 10)}`
+                          : savedMintDate}
+                      </Text>
+                    </Flex>
+                  </GridItem>
+                  <GridItem>
+                    <Flex
+                      flexDirection="column"
+                      alignItems="flex-start"
+                      justifyContent="center"
+                      height="100%"
+                    >
+                      <Flex justifyContent="flex-start" alignItems="center">
+                        <Text>METADATA</Text>
+                        <OpenLinkIcon />
+                      </Flex>
+                      <Text color="#0B8378" textDecoration="underline">
+                        <a
+                          href={`
+                            https://${process.env.NEXT_PUBLIC_NETWORK}.tzkt.io/${savedContractAddress}/tokens/0/metadata`}
+                        >
+                          {savedContractAddress}
+                        </a>
+                      </Text>
+                    </Flex>
+                  </GridItem>
+                </Grid>
+              </Box>
+            )}
+
+            <Flex justifyContent="center" mb={4} mt={4}>
+              <Button
+                onClick={() => setIsDetailsOpen(!isDetailsOpen)}
+                bg="transparent"
+                color="#0B8378"
+                _hover={{ bg: "transparent" }}
+              >
+                {isDetailsOpen ? "Close" : "Collectible Details"}
+              </Button>
+            </Flex>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </>
   );
 }

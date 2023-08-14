@@ -22,10 +22,10 @@ import AlertIcon from "@/icons/AlertIcon";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Home() {
+export default function Purchase() {
   const router = useRouter();
   const { address, callcontract } = useConnection();
-  const [balance, setBalance] = useState(null);
+  const [balance, setBalance] = useState<number | null>(null);
   const [showInsufficientBalance, setShowInsufficientBalance] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -40,10 +40,12 @@ export default function Home() {
         const response = await fetch(
           `https://api.tzkt.io/v1/accounts/${address}/balance`
         );
-        const data = await response.json();
-        setBalance(data / 1000000);
+        const MUTEZ = 1000000;
+        const balanceInMutez = await response.json();
+        const balanceInTez = balanceInMutez / MUTEZ;
+        setBalance(balanceInTez);
 
-        if (data < 1) {
+        if (balanceInTez < 1) {
           setShowInsufficientBalance(true);
         } else {
           setShowInsufficientBalance(false);
