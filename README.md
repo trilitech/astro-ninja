@@ -13,6 +13,7 @@ Then cd into the cloned repo and run:
 ```bash
 npm i
 ```
+Update the .env.example file to include your desired variables and remove .example from the filename.
 In order to start the dapp run:
 ```bash
 npm run dev
