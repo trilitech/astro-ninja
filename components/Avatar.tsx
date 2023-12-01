@@ -171,7 +171,6 @@ export const Avatar = ({ address }: { address: string }) => {
               justifyContent="center"
               onClick={toggleDropdown}
               cursor="pointer"
-              mb="4"
             >
               <span>{address.substring(0, 3) + ".." + address.slice(-5)}</span>
               <Box marginLeft="5px">
@@ -224,11 +223,10 @@ export const Avatar = ({ address }: { address: string }) => {
 
           <Flex flexWrap="wrap"></Flex>
           <Box
-            marginTop="15px"
+            mt="4"
+            mb="4"
             width="80%"
             borderBottom="1px solid #DBDBDB"
-            margin="auto"
-            marginBottom="25px"
             position="relative"
           ></Box>
           <MenuItem
